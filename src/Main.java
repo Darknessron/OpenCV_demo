@@ -15,8 +15,7 @@ import com.meng.highgui.ImageGui;
 
 public class Main {
 
-  public static int thresh = 100;
-  public static int max_thresh = 255;
+  public static int thresh = 20;
 
 
   public static void main(String[] args) {
@@ -25,12 +24,19 @@ public class Main {
 
     Mat src = null;
     Mat gray = new Mat();
+    Mat dst = new Mat();
     // Load source image
     src = Imgcodecs.imread("data/car-2.jpg");
+    
+    
 
     // Convert image to gray and blur it
-    Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2GRAY);
-    Imgproc.blur(gray, gray, new Size(3, 3));
+    //Imgproc.blur(gray, gray, new Size(3, 3));
+    Imgproc.Laplacian(src, dst, src.depth());
+    //Imgproc.GaussianBlur(src, src, new Size(3, 3), 0, 0);
+    Imgproc.cvtColor(dst, gray, Imgproc.COLOR_BGR2GRAY);
+    
+    
 
     Mat drawing = threshCallback(gray);
     
@@ -54,8 +60,8 @@ public class Main {
     Mat drawing = Mat.zeros( canny.size(), CvType.CV_8UC3 );
     for( int i = 0; i< contours.size(); i++ )
        {
-         Scalar color = new Scalar( ThreadLocalRandom.current().nextInt(0, 255 + 1), ThreadLocalRandom.current().nextInt(0, 255 + 1), ThreadLocalRandom.current().nextInt(0, 255 + 1) );
-         Imgproc.drawContours( drawing, contours, i, color, 2, 8, hierarchy, 0, new Point() );
+         Scalar color = new Scalar( 255, 255, 255 );
+         Imgproc.drawContours( drawing, contours, i, color, 1, 8, hierarchy, 0, new Point() );
        }
 
     return drawing;
