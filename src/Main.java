@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -11,11 +10,9 @@ import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
-import com.meng.highgui.ImageGui;
-
 public class Main {
 
-  public static int thresh = 20;
+  public static int thresh = 40;
 
 
   public static void main(String[] args) {
@@ -24,25 +21,36 @@ public class Main {
 
     Mat src = null;
     Mat gray = new Mat();
-    Mat dst = new Mat();
     // Load source image
-    src = Imgcodecs.imread("data/car-2.jpg");
+    src = Imgcodecs.imread("data/car-3.jpg");
     
     
 
     // Convert image to gray and blur it
-    //Imgproc.blur(gray, gray, new Size(3, 3));
-    Imgproc.Laplacian(src, dst, src.depth());
-    //Imgproc.GaussianBlur(src, src, new Size(3, 3), 0, 0);
-    Imgproc.cvtColor(dst, gray, Imgproc.COLOR_BGR2GRAY);
+    Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2GRAY);
+    Imgproc.blur(gray, gray, new Size(3, 3));
+    Imgproc.GaussianBlur(gray, gray, new Size(3, 3), 0, 0);
+    //Imgproc.Laplacian(src, dst, src.depth());
     
     
 
     Mat drawing = threshCallback(gray);
     
+    Mat origin = Imgcodecs.imread("data/car-2.jpg");
+    
+    Mat dest =  Mat.zeros( origin.size(), CvType.CV_8UC3 );
+    Imgproc.resize(drawing, drawing, dest.size());
+    
+    origin.copyTo(dest, drawing);
+    
+    Imgcodecs.imwrite("data/test1.jpg", dest);
+    //Imgcodecs.imwrite("data/car-4.jpg", drawing);
+    
+    /*
     //Show img
     ImageGui gui = new ImageGui(drawing, "drawing");
     gui.imshow();
+    */
   }
 
   public static Mat threshCallback(Mat gray) {
@@ -55,12 +63,14 @@ public class Main {
     /// Find contours
     Imgproc.findContours( canny, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE, new Point(0, 0) );
 
+    
     /// Draw contours
     
     Mat drawing = Mat.zeros( canny.size(), CvType.CV_8UC3 );
+    drawing.setTo(new Scalar(0,0,0));
     for( int i = 0; i< contours.size(); i++ )
        {
-         Scalar color = new Scalar( 255, 255, 255 );
+         Scalar color = new Scalar(255, 255, 255);
          Imgproc.drawContours( drawing, contours, i, color, 1, 8, hierarchy, 0, new Point() );
        }
 
