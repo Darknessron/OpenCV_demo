@@ -16,7 +16,6 @@ public class Main {
 
 
   public static void main(String[] args) {
-    System.out.println("Welcome to OpenCV " + Core.VERSION);
     System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
     Mat src = null;
@@ -28,29 +27,17 @@ public class Main {
 
     // Convert image to gray and blur it
     Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2GRAY);
+	Imgproc.threshold(gray, gray, 128, 255, Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
     Imgproc.blur(gray, gray, new Size(3, 3));
     Imgproc.GaussianBlur(gray, gray, new Size(3, 3), 0, 0);
-    //Imgproc.Laplacian(src, dst, src.depth());
+	//Convert image to Binary (only black and with)
     
-    
+
+    Imgcodecs.imwrite("data/test1.jpg", gray);
 
     Mat drawing = threshCallback(gray);
     
-    Mat origin = Imgcodecs.imread("data/car-2.jpg");
     
-    Mat dest =  Mat.zeros( origin.size(), CvType.CV_8UC3 );
-    Imgproc.resize(drawing, drawing, dest.size());
-    
-    origin.copyTo(dest, drawing);
-    
-    Imgcodecs.imwrite("data/test1.jpg", dest);
-    //Imgcodecs.imwrite("data/car-4.jpg", drawing);
-    
-    /*
-    //Show img
-    ImageGui gui = new ImageGui(drawing, "drawing");
-    gui.imshow();
-    */
   }
 
   public static Mat threshCallback(Mat gray) {
