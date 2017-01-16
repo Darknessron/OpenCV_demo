@@ -7,6 +7,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -78,10 +79,8 @@ public class CutParts {
 		// Find contours from mask
 		Imgproc.findContours(mask, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE, new Point(0, 0));
 		
-		System.out.println(contours.size());
-		
-		
 		MatOfPoint2f shape = null;
+		Rect rect = null;
 		
 		for (Point target : targetParts)	{
 			targetPart = Mat.zeros(mask.size(), CvType.CV_8UC3);
@@ -92,8 +91,18 @@ public class CutParts {
 				
 				if (isInside)	{
 					result = new Mat();
-					Imgproc.fillConvexPoly(targetPart, mop, white);
+					rect = Imgproc.boundingRect(mop);
+					//show more image than just shape
+					rect.x = rect.x - 50;
+					rect.y = rect.y - 50;
+					rect.height = rect.height + 100;
+					rect.width = rect.width + 100;
+					//end of show more image than just shape
+					Imgproc.rectangle(targetPart, rect.tl(), rect.br(), white, Core.FILLED);
+					//Imgproc.fillConvexPoly(targetPart, mop, white);
 					src.copyTo(result, targetPart);
+					//cut black edges
+					result = new Mat(result, rect);
 					resultList.add(result);
 					break;
 				}
