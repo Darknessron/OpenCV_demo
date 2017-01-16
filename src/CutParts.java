@@ -26,10 +26,24 @@ public class CutParts {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
 	public static void main(String[] args) {
-		Mat src = Imgcodecs.imread("data/car-2.jpg");
+		Mat src = Imgcodecs.imread("data/test.jpg");
 		Mat mask = Imgcodecs.imread("data/car-mask.jpg");
 		
-		List<Mat> parts = cutROI(src, mask, new Point(629, 144), new Point(443, 294), new Point(259, 408), new Point(473, 552), new Point(747, 520));
+		Point part0 = new Point(445, 665);
+                Point part1 = new Point(677, 553);
+                Point part2 = new Point(665, 1105);
+                Point part3 = new Point(917, 953);
+                Point part4 = new Point(441, 1525);
+                Point part5 = new Point(825, 1641);
+                Point part6 = new Point(821, 1861);
+                Point part7 = new Point(969, 2085);
+                Point part8 = new Point(1169, 1337);
+                Point part9 = new Point(1229, 1857);
+                Point part10 = new Point(757, 2153);
+		
+		
+		
+		List<Mat> parts = cutROI(src, mask, part0, part1, part2, part3, part4, part5, part6, part7, part8, part9, part10);
 		
 		for (int i = 0; i< parts.size(); i++)	{
 			Imgcodecs.imwrite("data/part-"+i+".jpg", parts.get(i));
