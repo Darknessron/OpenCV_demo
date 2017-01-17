@@ -93,10 +93,10 @@ public class CutParts {
 					result = new Mat();
 					rect = Imgproc.boundingRect(mop);
 					//show more image than just shape
-					rect.x = rect.x - 50;
-					rect.y = rect.y - 50;
-					rect.height = rect.height + 100;
-					rect.width = rect.width + 100;
+					rect.x = rect.x - 10;
+					rect.y = rect.y - 10;
+					rect.height = rect.height + 200;
+					rect.width = rect.width + 200;
 					//end of show more image than just shape
 					Imgproc.rectangle(targetPart, rect.tl(), rect.br(), white, Core.FILLED);
 					//Imgproc.fillConvexPoly(targetPart, mop, white);
