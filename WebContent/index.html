@@ -3,8 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript" src="./js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function()	{
+		var url = "./ImageServlet";
+		$("#button").click(function(){
+		    $.ajax({url: url, success: function(result){
+		    	for (var i = 0; i<result.length; i++)	{
+		    		var img = $('<img id="image_'+i+'">'); //Equivalent: $(document.createElement('img'))
+		    		img.attr('src', 'data:image/'+result[i].imageType+';base64,'+result[i].base64);
+		    		img.appendTo('#imagediv');
+		    		//alert(i);
+		    	}
+		        //$("#img").attr("src", "data:image/jepg;base64,"+result);
+		    }});
+		}); 
+	});
+</script>
 </head>
 <body>
-Hello!!!
+<button id="button">test</button>
+<div id="imagediv">
+</div>
 </body>
 </html>
