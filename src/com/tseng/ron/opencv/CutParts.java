@@ -30,10 +30,6 @@ public class CutParts {
 	public static int thresh = 40;
 	public static Point[] PARTS = new Point[11];
 	public static Mat MASK = null;
-	static {
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-		initPartsPoint();
-	}
 
 	private void initMask() {
 		URL maskUrl = getClass().getClassLoader().getResource("data/car-mask.jpg");
@@ -69,6 +65,10 @@ public class CutParts {
 	}
 	
 	public List<Mat> cutROI(File imageFile) {
+		System.out.println("Welcome to OpenCV " + Core.VERSION);
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		initPartsPoint();
+		System.out.println(imageFile.getAbsolutePath());
 		Mat src = Imgcodecs.imread(imageFile.getAbsolutePath());
 		return cutROI(src);
 	}

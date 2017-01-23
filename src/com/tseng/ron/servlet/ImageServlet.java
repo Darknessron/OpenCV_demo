@@ -23,7 +23,6 @@ import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.imgcodecs.Imgcodecs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -38,10 +37,6 @@ import com.tseng.ron.opencv.CutParts;
 public class ImageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ServletFileUpload uploader = null;
-
-	static {
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-	}
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -61,44 +56,6 @@ public class ImageServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		doPost(request, response);
-		if (true) return;
-		
-		
-		
-		
-		
-		
-		
-		
-		Mat matrix1 = Imgcodecs.imread("D:\\Project\\OpenCV_demo\\src\\data\\car-1.jpg");
-		Mat matrix2 = Imgcodecs.imread("D:\\Project\\OpenCV_demo\\src\\data\\car-2.jpg");
-		Mat matrix3 = Imgcodecs.imread("D:\\Project\\OpenCV_demo\\src\\data\\car-3.jpg");
-		
-		
-		ObjectMapper mapper = new ObjectMapper();
-		ArrayNode arrayNode = mapper.createArrayNode();
-
-		ObjectNode objectNode1 = mapper.createObjectNode();
-		objectNode1.put("imageType", "jpeg");
-		objectNode1.put("base64", parseImageToBase64(matToBufferedImage(matrix1)));
-
-		ObjectNode objectNode2 = mapper.createObjectNode();
-		objectNode2.put("imageType", "jpeg");
-		objectNode2.put("base64", parseImageToBase64(matToBufferedImage(matrix2)));
-
-		ObjectNode objectNode3 = mapper.createObjectNode();
-		objectNode3.put("imageType", "jpeg");
-		objectNode3.put("base64", parseImageToBase64(matToBufferedImage(matrix3)));
-
-		/**
-		 * Array contains JSON Objects
-		 */
-		arrayNode.add(objectNode1);
-		arrayNode.add(objectNode2);
-		arrayNode.add(objectNode3);
-
-		response.setContentType("application/json");
-		response.getWriter().write(arrayNode.toString());
 	}
 	
 	@Override
@@ -113,6 +70,7 @@ public class ImageServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 		if (isMultipart)	{
 			Collection<Part> uploadFile = request.getParts();
